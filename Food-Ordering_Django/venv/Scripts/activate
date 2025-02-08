@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\Mahitha\Downloads\Food-Ordering_Django\Food-Ordering_Django\venv"
+VIRTUAL_ENV="C:\Users\Mahitha\Desktop\Major Project\Food-Ordering_Django\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

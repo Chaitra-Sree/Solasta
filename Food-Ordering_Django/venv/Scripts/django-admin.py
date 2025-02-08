@@ -1,4 +1,4 @@
-#!C:\Users\Mahitha\Downloads\Food-Ordering_Django\Food-Ordering_Django\venv\Scripts\python.exe
+#!C:\Users\Mahitha\Desktop\Major Project\Food-Ordering_Django\venv\Scripts\python.exe
 from django.core import management
 
 if __name__ == "__main__":

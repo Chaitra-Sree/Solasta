@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\Mahitha\Downloads\Food-Ordering_Django\Food-Ordering_Django\venv
+set VIRTUAL_ENV=C:\Users\Mahitha\Desktop\Major Project\Food-Ordering_Django\venv
 
 if not defined PROMPT set PROMPT=$P$G
 
