@@ -1,25 +1,144 @@
 {% extends 'orders/header.html' %}
 
-{% block content %}
-    <div class="container-fluid" style="position: relative;top: 50%;transform: translateY(50%);">
-      <div class="row justify-content-center">
-        <h3><u>Contact Details</u></h3>
-      </div>
-      <div class="row justify-content-center">
-        <p>Our phone number :91876543289</p>
-      </div>
-      <div class="row justify-content-center">
-        <p>Our fax number is 111-222-333-444</p>
-      </div>
-      <div class="row justify-content-center">
-        <p>Find us on Twitter @Solastanotreal</p>
-      </div>
-      <div class="row justify-content-center">
-        <p>And Instagram @Solastanotreal</p>
-      </div>
-      <div class="row justify-content-center">
-        <p>If you have any questions or comments or would like to get on our email list you can email us at loremipsum@gmail.com</p>
-      </div>
-    </div>
+{% load static %}
 
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #ece9e6, #ffffff);
+            color: #4a4a4a;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            padding: 50px;
+            gap: 20px;
+        }
+
+        .info-section {
+            flex: 1;
+        }
+
+        .info-section h3 {
+            margin-top: 0;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+            color: #333;
+        }
+
+        .contact-form {
+            flex: 1;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .contact-form:hover {
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #6c63ff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #4e4ae6;
+        }
+
+        .subscribe-section {
+            background-color: #fafafa;
+            padding: 50px 0;
+            text-align: center;
+            box-shadow: inset 0 -3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .subscribe-section input[type="email"] {
+            padding: 10px;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .impo {
+            background-image: url('{% static "orders/candlelight.png" %}');
+            background-size: cover;
+            background-position: center;
+            height: 70vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            font-size: 3rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        h1, h3, p {
+            font-family: 'Frank Ruhl Libre', serif;
+        }
+
+        .info-section p {
+            line-height: 1.8;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="impo">
+        <h1>CONTACT US</h1>
+    </div>
+    <div class="container">
+        <div class="info-section">
+            <h3>Office Address</h3>
+            <p>380 St Kilda Road, Melbourne<br>VIC 3004, Australia</p>
+
+            <h3>Working Hours</h3>
+            <p>Monday to Friday: 09:00 to 18:30<br>Saturday: 15:30</p>
+
+            <h3>Message Us</h3>
+            <p>support@example.com<br>info@example.com</p>
+        </div>
+        <div class="contact-form">
+            <h3>Send Us a Message</h3>
+            <form>
+                <input type="text" placeholder="Your Name" required><br>
+                <input type="email" placeholder="Your Email" required><br>
+                <textarea placeholder="Your Message" rows="5" required></textarea><br>
+                <button type="submit" class="form" style="background-color: #f0edde; color: #573c2a; border: 2px solid #f0edde; 
+                          border-radius: 5px; padding: 5px 10px;">
+                          Subscribe
+                      </button>
+            </form>
+        </div>
+    </div>
+  
+</body>
+</html>
 {% endblock %}

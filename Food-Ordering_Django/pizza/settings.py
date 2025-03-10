@@ -68,6 +68,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tinymce',
+    
+    
+    
 ]
 
 MIDDLEWARE = [
@@ -153,3 +156,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
         os.path.join(BASE_DIR, 'static'),
    ]
+
+PAYPAL_CLIENT_ID = "AfYaMGyH05MFfWDfTTL32MCoMgYXi5K0zqxxIBX07mB8q7XxwnK6A-hhN_HB6wZ2zIeK-r3AeDeiIfwJ"
+PAYPAL_CLIENT_SECRET = "EGYdaY4cLkrIMzYthqf2G6YVBLp1wxRcvKtw9cA83NfgIBoHor3aldODwdH9x2netp9s1Wo29Jz1E1z3"
+PAYPAL_ENVIRONMENT = "sandbox"  # Change to 'live' for production
+

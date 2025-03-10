@@ -6,6 +6,15 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import logout, authenticate, login
 import json
 from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.conf import settings
+import paypalrestsdk
+import datetime
+from django.urls import reverse
+
+from django.http import HttpResponse
+from django.shortcuts import redirect
 
 # Create your views here.
 def index(request):
@@ -73,28 +82,33 @@ def salad(request):
         return redirect("orders:login")
 
 
-def subs(request):
+def tacos(request):
     if request.user.is_authenticated:
-        return render(request, "orders/sub.html", context = {"dishes":Sub.objects.all})
+        return render(request, "orders/tacos.html", context = {"dishes":Sub.objects.all})
     else:
         return redirect("orders:login")
 
 
-def dinner_platters(request):
+def platters(request):
     if request.user.is_authenticated:
-        return render(request, "orders/dinner_platters.html", context = {"dishes":DinnerPlatters.objects.all})
+        # Use parentheses to call the method and get the query results
+        dishes = DinnerPlatters.objects.all()
+        print(dishes)  # Add a debug print statement to check the data
+        return render(request, "orders/platters.html", context={"dishes": dishes})
     else:
         return redirect("orders:login")
 
+
+# Static Pages
 def directions(request):
     if request.user.is_authenticated:
         return render(request, "orders/directions.html")
     else:
         return redirect("orders:login")
 
-def hours(request):
+def aboutus(request):
     if request.user.is_authenticated:
-        return render(request, "orders/hours.html")
+        return render(request, "orders/aboutus.html")
     else:
         return redirect("orders:login")
 
@@ -120,6 +134,18 @@ def checkout(request):
 
         order = UserOrder(username=username, order=list_of_items, price=float(price), delivered=False) #create the row entry
         order.save() #save row entry in database
+
+        # Capture billing details from the form
+        billing_details = {
+            'name': request.POST.get('name', 'Not Provided'),
+            'email': request.POST.get('email', 'Not Provided'),
+            'address': request.POST.get('address', 'Not Provided'),
+            'city': request.POST.get('city', 'Not Provided'),
+            'state': request.POST.get('state', 'Not Provided'),
+            'zip': request.POST.get('zip', 'Not Provided'),
+        }
+
+        request.session['billing_details'] = billing_details
 
         response_data['result'] = 'Order Recieved!'
 
@@ -173,10 +199,117 @@ def save_cart(request):
             content_type="application/json"
         )
 
+
+
 def retrieve_saved_cart(request):
-    saved_cart = SavedCarts.objects.get(username = request.user.username)
-    return HttpResponse(saved_cart.cart)
+    try:
+        saved_cart = SavedCarts.objects.get(username=request.user.username)
+        # Ensure cart is not None and is valid JSON
+        cart_data = saved_cart.cart if saved_cart.cart else '[]' #default to an empty cart
+        return JsonResponse({'cart': cart_data}, safe=False) # Return as a JSON object
+    except SavedCarts.DoesNotExist:
+        # No cart saved for this user, return an empty cart
+        return JsonResponse({'cart': '[]'}, safe=False)
+
 
 def check_superuser(request):
     print(f"User super??? {request.user.is_superuser}")
     return HttpResponse(request.user.is_superuser)
+
+
+from django.shortcuts import render
+
+
+
+
+paypalrestsdk.configure({
+    "mode": "sandbox",  # "sandbox" or "live"
+    "client_id": "AW0vKEt-h7MrVgflNzqtWdDAsTV8etm7eu4wFsmJgVl_71SO2A6-uX_aDq8jjx66U1MnAcLwYFSPJYmb",
+    "client_secret": "EBZ3CrrlH0ebncizYblyqWEdNRsT_HkxFFy4NJzdC2p5FnrEQb0BvWfgw-qifZMxh2OShv8jqsm556G5",
+})
+
+
+
+
+
+
+
+from django.shortcuts import render
+from django.http import HttpResponse
+
+def payment_page(request):
+    amount = request.POST.get('amount', '0')  # Get the amount from the POST request
+    return render(request, 'orders/payment.html', {'amount': amount})  # Pass the amount to the template
+   
+   
+
+def checkout_button(request):
+    return render(request, 'orders/checkout_btn.html')
+
+import paypalrestsdk
+from django.conf import settings
+from django.shortcuts import render, redirect
+
+paypalrestsdk.configure({
+    "mode": settings.PAYPAL_ENVIRONMENT,  # "sandbox" or "live"
+    "client_id": settings.PAYPAL_CLIENT_ID,
+    "client_secret": settings.PAYPAL_CLIENT_SECRET
+})
+
+
+
+def payment_process(request):
+    amount = request.POST.get('amount', '0')  # Get the amount from the POST request
+
+    payment = paypalrestsdk.Payment({
+        "intent": "sale",
+        "payer": {
+            "payment_method": "paypal"
+        },
+        "redirect_urls": {
+            "return_url": "http://127.0.0.1:8000/payment_success/",
+            "cancel_url": "http://127.0.0.1:8000/payment_cancel/"
+        },
+        "transactions": [{
+            "amount": {
+                "total": f"{float(amount):.2f}",
+                "currency": "USD"
+            },
+            "description": "Payment for Order"
+        }]
+    })
+
+    if payment.create():
+        for link in payment.links:
+            if link.rel == "approval_url":
+                return redirect(link.href)  # Redirect user to PayPal for approval
+    else:
+        return render(request, "orders/payment_failed.html", {"error": payment.error})
+
+def payment_success(request):
+    billing_details = {
+        'name': request.GET.get('name', 'Not Provided'),
+        'email': request.GET.get('email', 'Not Provided'),
+        'address': request.GET.get('address', 'Not Provided'),
+        'city': request.GET.get('city', 'Not Provided'),
+        'state': request.GET.get('state', 'Not Provided'),
+        'zip': request.GET.get('zip', 'Not Provided'),
+    }
+    return render(request, "orders/payment_success.html")
+
+
+
+def payment_cancel(request):
+    return render(request, "orders/payment_cancel.html")
+
+def retrieve_saved_cart(request):
+    # Your logic to retrieve the saved cart
+    return JsonResponse({'status': 'success'})
+
+
+def qr_code_view(request):
+    return render(request, 'orders/qr_code.html') 
+
+
+
+
