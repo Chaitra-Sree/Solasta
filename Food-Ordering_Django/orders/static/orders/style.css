@@ -1,4 +1,90 @@
 #khra{
   color: pink;
 }
+.container-fluid{
+  
+  background-image: url("/static/orders/bg.jpg");  
+  background-position: center;
+  background-repeat: no-repeat;
+}
 
+
+
+.logo {
+  width: 100px;
+  height: auto;
+  display: block;
+ }
+  .nav-link {
+margin-right: 50px;
+color: #f0edde;
+font-family: "Frank Ruhl Libre", serif;
+font-optical-sizing: auto;
+font-size: large;
+font-weight: 200;
+font-style: normal;
+}
+
+.custom-bg {
+  background-color: #f8d7da;  /* Light red background */
+  padding: 20px;
+  border-radius: 10px;
+}
+
+
+.card-body {
+  background-color: #573c2a !important;
+  color: white;
+  
+}
+
+.btn-dark {
+  background-color: #f0edde; 
+  color: #573c2a; 
+  font-family: 'Frank Ruhl Libre', serif;
+  font-weight: normal;
+  margin-left:70px;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom:10px;
+  
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.footer .row .col-md-4 {
+  flex: 1 1 300px; /* Allow columns to adjust width based on the screen size */
+  margin-bottom: 20px; /* Add spacing between items */
+}
+
+.footer ul {
+  padding: 0;
+  list-style: none;
+}
+
+.footer a {
+  text-decoration: none;
+  color: white;
+}
+
+.social-icons a {
+  margin: 0 5px;
+  display: inline-block;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    flex-direction: column; /* Stack the columns vertically for smaller screens */
+  }
+  .social-icons a {
+    margin: 10px;
+  }
+}

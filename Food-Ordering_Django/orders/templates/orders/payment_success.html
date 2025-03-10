@@ -1,0 +1,94 @@
+{% extends 'orders/header.html' %}
+{% block content %}
+
+<style>
+    body {
+        font-family: 'Playfair Display', serif;
+        background-color: #f0f8ff;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background: linear-gradient(135deg, #f4f4f4, #e8f0fe);
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        text-align: center;
+    }
+    h1 {
+        font-size: 28px;
+        color: #2e8b57;
+    }
+    h3 {
+        font-size: 22px;
+        color: #573c2a;
+    }
+    p {
+        margin: 8px 0;
+        font-size: 20px;
+        color: #573c2a;
+    }
+    .billing-info {
+        margin-top: 20px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #ffffff;
+    }
+    .button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #573c2a;
+        background-color: #f0eddf;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .button:hover {
+        background-color: #eae2e2;
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 Payment Successful!</h1>
+        <h3>Order Summary</h3>
+        <div id="customer-info" class="billing-info">
+            <p><strong>Name:</strong> <span id="name"></span></p>
+            <p><strong>Email:</strong> <span id="email"></span></p>
+            <p><strong>Address:</strong> <span id="address"></span></p>
+            <p><strong>City:</strong> <span id="city"></span></p>
+            <p><strong>State:</strong> <span id="state"></span></p>
+            <p><strong>Zip Code:</strong> <span id="zip"></span></p>
+        </div>
+        <button class="button" onclick="window.print()">Print Receipt</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Retrieve data from localStorage
+            var storedDetails = JSON.parse(localStorage.getItem("customerDetails"));
+            
+            // Log the retrieved data to check if it is null or not
+            console.log("Stored Customer Details:", storedDetails);
+            
+            if (storedDetails) {
+                document.getElementById("name").innerText = `${storedDetails.firstName} ${storedDetails.lastName}`;
+                document.getElementById("email").innerText = storedDetails.email;
+                document.getElementById("address").innerText = `${storedDetails.address} ${storedDetails.address2 || ''}`;
+                document.getElementById("city").innerText = storedDetails.city;
+                document.getElementById("state").innerText = storedDetails.state;
+                document.getElementById("zip").innerText = storedDetails.zip;
+            } else {
+                document.getElementById("customer-info").innerText = "No customer details found.";
+            }
+        });
+    </script>
+    
+</body>
+</html>    
+{% endblock %}

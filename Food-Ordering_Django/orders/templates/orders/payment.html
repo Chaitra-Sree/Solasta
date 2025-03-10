@@ -1,0 +1,305 @@
+{% extends 'orders/header.html' %}
+{% block content %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Work+Sans:wght@400&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        font-family: 'Work Sans', sans-serif;
+        background-color: #f8f9fa;
+        color: #573c2a;
+    }
+
+    hr {
+        color: #573c2a;
+    }
+
+    .text-center {
+        color: #573c2a;
+        margin-bottom: 20px;
+    }
+
+    h1, h3 {
+        font-family: 'Playfair Display', serif;
+        font-weight: bold;
+        color: #573c2a;
+    }
+
+    .container {
+        max-width: 900px;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 50px;
+    }
+
+    .form-control {
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .btn-primary {
+        background-color: #573c2a;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+    .btn-primary:hover {
+        background-color: #452f1d;
+    }
+
+    .card {
+        border: none;
+        background: #fff;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .container {
+        background-color: #e4e2db;
+    }
+</style>
+
+<div class="container">
+    <h1 class="text-center">Checkout</h1>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <h3 style="font-size:25px; margin-top:30px; margin-bottom:30px;">Customer Information</h3>
+            <hr>
+            <form id="customer-form" onsubmit="saveCustomerDetails(event)">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" class="form-control" id="email" name="email" required placeholder="Enter your email">
+                </div>
+                <h3 style="font-size:24px; margin-top:30px; margin-bottom:30px;">Billing Address</h3>
+                <hr>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputFirstName">First Name</label>
+                        <input type="text" class="form-control" id="inputFirstName" name="name" required placeholder="First Name">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputLastName">Last Name</label>
+                        <input type="text" class="form-control" id="inputLastName" name="last_name" required placeholder="Last Name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputAddress">Address</label>
+                    <input type="text" class="form-control" id="inputAddress" name="address" required placeholder="1234 Main St">
+                </div>
+                <div class="form-group">
+                    <label for="inputAddress2">Address 2</label>
+                    <input type="text" class="form-control" id="inputAddress2" name="address2" placeholder="Apartment, studio, or floor">
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputCity">City</label>
+                        <input type="text" class="form-control" id="inputCity" name="city" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="inputState">State</label>
+                        <select id="inputState" name="state" class="form-control" required>
+                            <option selected>Choose...</option>
+                            <option>telangana</option>
+                            <option>karnataka</option>
+                            <option>kolkata</option>
+                            <option>Gujarat</option>
+                            <option>kerala</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="inputZip">Zip</label>
+                        <input type="text" class="form-control" id="inputZip" name="zip">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Details</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <h3 style="font-size:25px;">Order Summary </h3>
+            <div class="card p-3 mt-4">
+                <div class="d-flex justify-content-between">
+                    <span>Item</span>
+                    <span>Subtotal</span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <span>Your total amount is:</span>
+                    <span id="checkout_total">₹0.00</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span>Delivery Cost</span>
+                    <span>₹80.00</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span>Tax</span>
+                    <span>₹90.00</span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between font-weight-bold">
+                    <span>Sub Total</span>
+                    <span id="total_price"></span>
+                </div>
+            </div>
+            <div id="paypal-button-container" style="margin-top: 20px;"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://www.paypal.com/sdk/js?client-id=AfYaMGyH05MFfWDfTTL32MCoMgYXi5K0zqxxIBX07mB8q7XxwnK6A-hhN_HB6wZ2zIeK-r3AeDeiIfwJ&currency=USD"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Retrieve stored cart total from localStorage
+    var storedTotal = localStorage.getItem("cartTotal") || "₹0.00";
+    console.log("Stored total:", storedTotal);
+
+    // Parse total amount
+    var total = parseFloat(storedTotal.replace('₹', '').trim()) || 0;
+    console.log("Parsed total:", total);
+
+    var deliveryCost = 80.00;
+    var tax = 90.00;
+    var subtotal = total + deliveryCost + tax;
+    console.log("Calculated subtotal:", subtotal);
+
+    // Update total amount display
+    document.getElementById("checkout_total").innerText = `₹${total.toFixed(2)}`;
+    document.getElementById("total_price").innerText = `₹${subtotal.toFixed(2)}`;
+
+    // Disable PayPal button initially
+    document.getElementById("paypal-button-container").style.display = 'none';
+
+    // Load saved customer details
+    loadCustomerDetails();
+});
+
+// Function to setup PayPal payment
+function setupPayPal(subtotalINR) {
+    var conversionRate = 0.01111; // Example: Replace with real API for accuracy
+    var subtotalUSD = subtotalINR * conversionRate;
+
+    console.log("INR Total:", subtotalINR);
+    console.log("Converted USD Total:", subtotalUSD);
+
+    paypal.Buttons({
+        createOrder: function (data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        currency_code: "USD",
+                        value: subtotalUSD.toFixed(2)
+                    }
+                }]
+            });
+        },
+        onApprove: function (data, actions) {
+            return actions.order.capture().then(function (details) {
+                alert('Transaction completed by ' + details.payer.name.given_name);
+                console.log(details);
+
+                // Show tick mark on success
+                var tickMark = document.createElement('div');
+                tickMark.innerHTML = '✓';
+                tickMark.style.fontSize = '50px';
+                tickMark.style.color = 'green';
+                document.getElementById("paypal-button-container").appendChild(tickMark);
+
+                // Generate unique invoice ID
+                var invoiceId = 'INV-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+
+                // Save transaction details to localStorage
+                localStorage.setItem("transactionDetails", JSON.stringify(details));
+                localStorage.setItem("invoiceId", invoiceId);
+
+                // Update order status in database
+                updateOrderStatus(details);
+
+                // Redirect to payment_success page
+                window.location.href = '/payment_success';
+            });
+        }
+    }).render('#paypal-button-container');
+}
+
+// Function to update order status in the database
+function updateOrderStatus(details) {
+    fetch('/update-order-status/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+            orderId: 'YOUR_ORDER_ID', // Replace with actual order ID
+            status: 'Paid'
+        })
+    }).then(response => response.json())
+      .then(data => {
+          console.log('Order status updated:', data);
+          window.location.href = '/orders?success=true';
+      });
+}
+
+// Function to save customer details
+function saveCustomerDetails(event) {
+    event.preventDefault(); // Prevents page reload
+
+    var firstName = document.getElementById("inputFirstName").value;
+    var lastName = document.getElementById("inputLastName").value;
+    var email = document.getElementById("email").value;
+    var address = document.getElementById("inputAddress").value;
+    var address2 = document.getElementById("inputAddress2").value;
+    var city = document.getElementById("inputCity").value;
+    var state = document.getElementById("inputState").value;
+    var zip = document.getElementById("inputZip").value;
+
+    console.log("Captured Form Values:", {
+        firstName, lastName, email, address, address2, city, state, zip
+    });
+
+    var customerDetails = {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        address: address,
+        address2: address2,
+        city: city,
+        state: state,
+        zip: zip
+    };
+
+    localStorage.setItem("customerDetails", JSON.stringify(customerDetails));
+
+    // Verify if data is saved properly
+    console.log("Data saved to localStorage:", localStorage.getItem("customerDetails"));
+
+    // Enable PayPal button
+    document.getElementById("paypal-button-container").style.display = 'block';
+
+    // Initialize PayPal payment
+    setupPayPal(parseFloat(document.getElementById("total_price").innerText.replace('₹', '').trim()));
+}
+
+// Function to load saved customer details
+function loadCustomerDetails() {
+    let storedDetails = JSON.parse(localStorage.getItem("customerDetails"));
+    if (storedDetails) {
+        document.getElementById("email").value = storedDetails.email;
+        document.getElementById("inputFirstName").value = storedDetails.firstName;
+        document.getElementById("inputLastName").value = storedDetails.lastName;
+        document.getElementById("inputAddress").value = storedDetails.address;
+        document.getElementById("inputAddress2").value = storedDetails.address2;
+        document.getElementById("inputCity").value = storedDetails.city;
+        document.getElementById("inputState").value = storedDetails.state;
+        document.getElementById("inputZip").value = storedDetails.zip;
+    }
+}
+</script>
+{% endblock %}
+

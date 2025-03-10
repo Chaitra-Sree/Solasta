@@ -1,0 +1,220 @@
+{% extends 'orders/header.html' %}
+{% load static %} 
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Solasta Food Ordering</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: 'Playfair Display', serif;
+            background-color: #f7f0ea;
+            color: #573c2a;
+        }
+
+        .about-us-container {
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 1200px;
+            line-height: 1.6;
+        }
+
+        /* Section Styles */
+        .about-us-content {
+            background-color: #fff7f0;
+            border: 1px solid #e1d4c8;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .about-us-content h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #573c2a;
+        }
+
+        .team-section .team-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background-color: #fff7f0;
+            border: 1px solid #e1d4c8;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .team-section img {
+            max-width: 300px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .team-section .team-info h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #573c2a;
+        }
+
+        .team-section .team-info p {
+            font-size: 1.2em;
+        }
+
+        .card-section {
+            text-align: center;
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #e1d4c8;
+            border-radius: 8px;
+            width: 300px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 1.5em;
+            color: #573c2a;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 1.1em;
+            color: #573c2a;
+        }
+
+        .testimonials {
+            background-color: #fff7f0;
+            border: 1px solid #e1d4c8;
+            border-radius: 8px;
+            margin-top: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .testimonial-card {
+            background-color: #ffffff;
+            border: 1px solid #e1d4c8;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        blockquote {
+            font-style: italic;
+            padding: 10px;
+            border-left: 4px solid #573c2a;
+            background-color: #f9f4ef;
+        }
+    </style>
+</head>
+<body>
+    <main class="about-us-container">
+        <!-- Combined Intro Section -->
+        
+        <section class="about-us-content">
+            <h1>Our Journey & Our Values</h1>
+            <p>
+                Established in 2010, Solasta began as a small passion project with a vision to redefine food delivery. 
+                We believe in quality, commitment, and community—bringing people closer through food.Our menu is thoughtfully crafted to offer a delightful mix of classic and contemporary dishes, catering to every palate. Whether you're dining in, taking out, or ordering online, we strive to provide an exceptional experience with every bite.
+            </p>
+        </section>
+
+        <!-- Meet the Team Section -->
+       
+
+        <!-- Card Section -->
+        <section class="card-section">
+            <h2>Why Choose Solasta?</h2>
+            <div class="card-container">
+                <div class="card">
+                    <img src="{% static 'orders/veggies.png'%}" alt="Fresh Ingredients">
+                    <h3>Fresh Ingredients</h3>
+                    <p>
+                        We source only the finest, freshest ingredients to make every dish delightful.
+                    </p>
+                </div>
+                <div class="card">
+                    <img src="{% static 'orders/delivery.jpeg'%}" alt="Fast Delivery">
+                    <h3>Fast Delivery</h3>
+                    <p>
+                        Enjoy your favorite meals at your doorstep in record time with our efficient service.
+                    </p>
+                </div>
+                <div class="card">
+                    <img src="{% static 'orders/seasoning.jpeg'%}" alt="Wide Variety">
+                    <h3>Wide Variety</h3>
+                    <p>
+                        From traditional classics to modern flavors, our menu has something for everyone.
+                    </p>
+                </div>
+            </div>
+        </section>
+      
+        
+        <!-- Testimonials Section -->
+        <section class="testimonials">
+            <h2>What Our Customers Say</h2>
+            <div class="grid-layout">
+                <div class="testimonial-card">
+                    <blockquote>
+                        "Solasta has redefined what food delivery should be. Exceptional service and mouthwatering meals!" - <strong>Riya Sharma</strong>
+                    </blockquote>
+                </div>
+                <div class="testimonial-card">
+                    <blockquote>
+                        "The perfect blend of taste and convenience. Solasta has never disappointed me." - <strong>Arjun Mehta</strong>
+                    </blockquote>
+                </div>
+                <div class="testimonial-card">
+                    <blockquote>
+                        "Their commitment to quality is unmatched. I’ve become a loyal customer!" - <strong>Ananya Bose</strong>
+                    </blockquote>
+                </div>
+                <div class="testimonial-card">
+                    <blockquote>
+                        "Solasta makes every meal feel special. A must-try for food lovers!" - <strong>Rohan Verma</strong>
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
+{% endblock %}

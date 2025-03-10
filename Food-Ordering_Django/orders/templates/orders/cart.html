@@ -1,30 +1,220 @@
 {% extends 'orders/header.html' %}
-
 {% block content %}
 
-<div class="container-fluid">
-  <div class="row justify-content-center">
-    <h2 id="cart_heading"></h2>
-    <table class="table">
-        <thead class="thead-light">
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Item Description</th>
-          <th scope="col">Price</th>
-        </tr>
-        </thead>
-        <tbody id="cart_body">
-        </tbody>
-    </table>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display&family=Frank+Ruhl+Libre&display=swap');
+    
+    #cart_heading {
+        font-family: 'Times New Roman', Times, serif;
+        text-align: center;
+        margin-right: 20px;
+        color:#573c2a;
+    }
+    
+    .cart-container {
+        width: 90%;
+        margin: auto;
+    }
+    
+    .cart-line {
+        width: 100%;
+        height: 2px;
+        background-color: #000;
+        margin: 10px 0;
+    }
+    
+    .cart-layout {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+    
+    .cart-card {
+        background-color: #f0edde;
+        padding: 20px;
+        
+        width: 65%;
+        
+    }
+    
+    .cart-card h4 {
+        font-family: 'Playfair Display', serif;
+        color: #573c2a;
+        text-align:center;
+    }
+    
+    .cart-card table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        text-align: left;
+    }
 
+    /* Styled table header with no internal lines */
+    .cart-card table thead {
+        background-color: #573c2a;
+        color: white;
+        font-family: 'Frank Ruhl Libre', serif;
+        border-radius: 8px;
+    }
 
-    <h3>Total: <span class="badge badge-primary" id="total"></span></h3>
-  </div>
+    .cart-card table th {
+        padding: 15px;
+        border: none;
+        color:#f0edde;
+        font-family: 'Frank Ruhl Libre', serif;
+        
+    }
 
-  <div class="row justify-content-center">
-    <button id="checkout_button" type="button" class="btn btn-success" onclick="checkout()">Checkout</button>
-  </div>
+    /* Styled table data rows without internal borders */
+    .cart-card table tbody tr {
+        background-color: #f0edde;
+        border-radius: 8px;
+        display: table-row;
+        font-family: "Frank Ruhl Libre", serif;
+        font-size:large;
+    }
+
+    .cart-card table td {
+        padding: 12px;
+        border: none;
+        font-family: "Frank Ruhl Libre", serif;
+        font-size:large;
+        
+    }
+
+    .cart-totals-card {
+        width: 30%;
+        background-color: #f0edde;
+        padding: 20px;
+        
+        
+        font-family: 'Playfair Display', serif;
+        text-align:center;
+    }
+    
+    .cart-totals-card h3 {
+        margin-bottom: 15px;
+        font-family: 'Playfair Display', serif;
+        color:#573c2a;
+        
+    }
+    
+    .cart-totals-card h4 {
+        font-family: 'Playfair Display', serif;
+        
+      
+    }
+    
+    #checkout_button {
+        background-color: #f0edde;
+        color: #573c2a;
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #573c2a;
+        
+        margin-top:20px;
+    }
+
+    hr{
+     border: 2px solid #573c2a;
+    width: 80%;
+    }
+
+    #total{
+        font-family: 'Times New Roman', Times, serif;
+        color:#573c2a;
+    }
+</style>
+
+<div class="cart-container">
+    <h2 id="cart_heading">Cart</h2>
+    <div class="cart-line"></div>
+    
+    <div class="cart-layout">
+        <div class="cart-card">
+            <h4>Shopping Cart</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">ITEM</th>
+                        <th scope="col">PRICE</th>
+                        <th scope="col">REMOVE</th>
+                    </tr>
+                </thead>
+                <tbody id="cart_body">
+                    <!-- Cart items will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="cart-totals-card">
+            <h3>Cart Total</h3>
+            <hr>
+            <h4>Total: <span id="total">0</span></h4>
+            <form method="POST" action="{% url 'orders:payment_page' %}">
+                {% csrf_token %}
+                <input type="hidden" name="amount" id="hidden_amount"> <!-- This will hold the total amount -->
+                <button id="checkout_button" type="submit">Proceed to Checkout</button>
+            </form>
+        </div>
+    </div>
 </div>
+<script>
+function updateTotal() {
+    var totalAmount = 0;
+    document.querySelectorAll("#cart_body tr").forEach(row => {
+        var priceCell = row.querySelector(".price");
+        if (priceCell) {
+            totalAmount += parseFloat(priceCell.innerText);
+        }
+    });
+
+    // Update the total on the page
+    document.getElementById('total').innerText = totalAmount.toFixed(2);
+    document.getElementById('hidden_amount').value = totalAmount.toFixed(2);
+
+    // Store the total in local storage
+    localStorage.setItem("cartTotal", totalAmount.toFixed(2));
+}
+
+document.getElementById('checkout_button').addEventListener('click', function(event) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    if (cart.length === 0) {
+        alert("Cart is empty. Please add items to the cart before proceeding to checkout.");
+        event.preventDefault(); // Prevents the form from being submitted
+    } else {
+        let totalAmount = document.getElementById('total').innerText;
+        localStorage.setItem('cartTotal', totalAmount);  // Store the total in local storage
+    }
+});
 
 
+  window.onload = function() {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let cartBody = document.getElementById('cart_body');
+
+    cartBody.innerHTML = '';
+
+    cart.forEach((item, index) => {
+    let row = document.createElement('tr');
+    row.innerHTML = `
+        <td>${index + 1}</td> 
+        <td>${item.item_description || 'N/A'}</td>
+        <td class="price">${parseFloat(item.price).toFixed(2) || '0.00'}</td>
+        <td><button onclick="remove_from_cart('${item.item_description}')">Remove</button></td>
+    `;
+    cartBody.appendChild(row);
+});
+
+
+    updateTotal();
+};
+  
+
+</script>
 {% endblock %}
+
+

@@ -1,26 +1,10 @@
 <!doctype html>
 <html lang="en">
-  <head><link rel="preconnect" href="https://fonts.googleapis.com">
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=Frank+Ruhl+Libre:wght@300..900&display=swap" rel="stylesheet">
-    <style>
-      .logo {
-       width: 100px;
-       height: auto;
-       display: block;
-      }
-       .nav-link {
-  margin-right: 50px;
-  color: #f0edde;
-  font-family: "Frank Ruhl Libre", serif;
-  font-optical-sizing: auto;
-  font-size: large;
-  font-weight: 200;
-  font-style: normal;
-}
 
-      
-    </style>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -34,17 +18,16 @@
 
     {% load static %}
     <link rel="stylesheet" href="{% static 'orders/main.js' %}">
-
+    <link rel="stylesheet" href="{% static 'orders/style.css' %}">
 
     <title>Solasta - Food Ordering System</title>
   </head>
   <body>
-
-
-    <nav  style="background: #573c2a ;"  class="navbar navbar-expand-lg">
+    
+    <nav style="background: #573c2a;" class="navbar navbar-expand-lg">
       <a class="navbar-brand" href="#">
-        <img src="{% static 'orders/logo11.png' %}" alt="our logo" width = "250" height="70">
-    </a>
+        <img src="{% static 'orders/logo11.png' %}" alt="our logo" width="250" height="70">
+      </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -56,37 +39,32 @@
             <a class="nav-link" href="/">MENU</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/directions">DIRECTIONS </a>
+            <a class="nav-link" href="/directions">BLOGS</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/hours">HOURS </a>
+            <a class="nav-link" href="/hours">ABOUT US</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/contact">CONTACT US</a>
           </li>
         </ul>
         <span class="navbar-text">
-          <a href="/view-orders" 
-            style="font-family: 'Frank Ruhl Libre', serif; background-color: #f0edde; color: #573c2a;" 
-            class="btn btn-info">View Orders
-          </a>
-          <a href="/cart" id="cart_button" class="btn btn-light" style= " font-family: 'Frank Ruhl Libre', serif;background-color: #573c2a; color:#f0edde;">My Cart <i class="fa fa-shopping-cart" style="font-size:24px;"></i></a>
-
-          <button type="button" style ="font-family: 'Frank Ruhl Libre', serif; background-color: #f0edde; color: #573c2a;" class="btn btn-dark" onclick="logout()">Logout</button>
+          <a href="/view-orders" class="btn btn-info" style="font-family: 'Frank Ruhl Libre', serif; background-color: #f0edde; color: #573c2a;">View Orders</a>
+          <a href="/cart" id="cart_button" class="btn btn-light" style="font-family: 'Frank Ruhl Libre', serif; background-color: #573c2a; color: #f0edde;">My Cart <i class="fa fa-shopping-cart" style="font-size:24px;"></i></a>
+          <button type="button" class="btn btn-light" style="font-family: 'Frank Ruhl Libre', serif; background-color: #f0edde; color: #573c2a;" onclick="logout()">Logout</button>
         </span>
         {% endif %}
       </div>
     </nav>
 
+   
     {% block content %}
     {% endblock %}
 
-
-
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbq9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7xUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <script src = "{% static 'orders/main.js' %}"></script>
+    <script src="{% static 'orders/main.js' %}"></script>
   </body>
 </html>
