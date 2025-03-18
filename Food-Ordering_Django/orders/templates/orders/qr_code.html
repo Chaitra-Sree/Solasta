@@ -10,7 +10,7 @@
             Scan QR Code to Redirect
         </h1>
         
-        <!-- QR Code Scanner Section -->
+        
          
         <div style="padding: 20px; border-radius: 15px; background:#604e4287; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 30px;">
            
@@ -46,11 +46,10 @@
     };
 
     function onScanSuccess(decodedText, decodedResult) {
-        console.log(`Scanned URL: ${decodedText}`);
-        alert(`Redirecting to: ${decodedText}`);
-        window.location.href = decodedText;
-    }
-
+    console.log(`Scanned URL: ${decodedText}`);
+    alert(`Redirecting to: ${decodedText}`);
+    window.location.href = decodedText;
+}
     function onScanFailure(error) {
         console.warn(`Scan failed: ${error}`);
     }

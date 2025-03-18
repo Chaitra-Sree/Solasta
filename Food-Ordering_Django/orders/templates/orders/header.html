@@ -33,7 +33,7 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navbarText">
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated or request.session.qr_access == '1' %}
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
             <a class="nav-link" href="/">MENU</a>
