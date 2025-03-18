@@ -1,43 +1,43 @@
 {% extends 'orders/header.html' %}
-
 {% block content %}
-<div class="container" style="margin-top: 50px;">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div style="border-radius: 15px; background: linear-gradient(135deg, #a97c50, #f7e8d6); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); padding: 40px; font-family: 'Playfair Display', serif;">
-                <h2 style="text-align: center; color: #573c2a; margin-bottom: 20px;">Register Your Account</h2>
-                <form method="POST">
-                    {% csrf_token %}
-                    <div style="margin-bottom: 15px;">
-                        <label for="username" style="color: #705343; font-size: 1.2em;">Username</label>
-                        <input id="username" type="text" name="username" style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #c8a27e; border-radius: 5px; background: #fdfaf5; color: #573c2a;">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <div class="container" style="margin-top:50px; font-family: 'Roboto', sans-serif;">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card shadow-lg" style="border-radius: 20px; overflow: hidden;">
+                    <div class="card-body" style="background: linear-gradient(135deg, #3E2F5B, #FFC857); padding: 40px;">
+                        <h3 class="text-center mb-4" style="font-weight: bold; color: #e4dddd; font-family: 'Playfair Display, serif' ;">Welcome Back</h3>
+                        <form method="POST" novalidate>
+                            {% csrf_token %}
+                            
+                            {% if form.errors %}
+                                <div class="alert alert-danger" style="border-radius: 10px; font-size: 0.95rem;">
+                                    <ul style="margin: 0; padding: 0; list-style: none;">
+                                        {% for field, errors in form.errors.items %}
+                                            {% for error in errors %}
+                                                <li>{{ error }}</li>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                            
+                            {{ form.as_p }}
+                            <button class="btn btn-primary btn-block mt-4" type="submit" 
+                                    style="background-color: #573c2a; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; padding: 12px; transition: all 0.3s ease;">
+                                Login
+                            </button>
+                        </form>
+                        <div class="text-center mt-4">
+                            <p style="color: #555; font-size: 0.95rem;">Don't have an account?</p>
+                            <a href="/register" class="btn btn-link" 
+                               style="color: #573c2a; font-weight: bold; text-decoration: none; font-size: 1rem; transition: color 0.2s ease;">
+                                Create an Account
+                            </a>
+                        </div>
                     </div>
-                    <div style="margin-bottom: 15px;">
-                        <label for="email" style="color: #705343; font-size: 1.2em;">Email</label>
-                        <input id="email" type="email" name="email" style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #c8a27e; border-radius: 5px; background: #fdfaf5; color: #573c2a;">
-                    </div>
-                    <div style="margin-bottom: 15px;">
-                        <label for="password" style="color: #705343; font-size: 1.2em;">Password</label>
-                        <input id="password" type="password" name="password" style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #c8a27e; border-radius: 5px; background: #fdfaf5; color: #573c2a;">
-                    </div>
-                    <div style="margin-bottom: 15px;">
-                        <label for="confirm_password" style="color: #705343; font-size: 1.2em;">Confirm Password</label>
-                        <input id="confirm_password" type="password" name="confirm_password" style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #c8a27e; border-radius: 5px; background: #fdfaf5; color: #573c2a;">
-                    </div>
-                    <div style="text-align: center;">
-                        <button class="btn btn-outline-dark" type="submit" style="background-color: #573c2a; color: white; border: none; padding: 10px 20px; font-size: 1.2em; border-radius: 5px; cursor: pointer;">
-                            Register
-                        </button>
-                    </div>
-                </form>
-                <p style="text-align: center; margin-top: 20px; color: #705343;">
-                    Already have an account? <br> 
-                    <a href="/login" style="color: #573c2a; text-decoration: none; font-weight: bold;">
-                        Login Here
-                    </a>.
-                </p>
+                </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}

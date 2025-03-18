@@ -12,17 +12,21 @@ from django.conf import settings
 import paypalrestsdk
 import datetime
 from django.urls import reverse
-
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+import logging
 from django.http import HttpResponse
 from django.shortcuts import redirect
 
-# Create your views here.
+
 def index(request):
     if request.user.is_authenticated:
-        #we are passing in the data from the category model
         return render(request, "orders/home.html", {"categories":Category.objects.all})
     else:
         return redirect("orders:login")
+
+
 
 def login_request(request):
     if request.method == 'POST':
@@ -33,16 +37,20 @@ def login_request(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
+                return redirect('/')  
+        else:
+           
+            return render(request, 'orders/login.html', {'form': form})
 
-                return redirect('/')
-
+    
     form = AuthenticationForm()
-    return render(request = request,
-                    template_name = "orders/login.html",
-                    context={"form":form})
+    return render(request, 'orders/login.html', {'form': form})
 
+logger = logging.getLogger(__name__)
 def logout_request(request):
+    logger.info("Logout request triggered for user: %s", request.user)
     logout(request)
+    logger.info("User successfully logged out.")
     return redirect("orders:login")
 
 def register(request):
@@ -54,13 +62,13 @@ def register(request):
             login(request, user)
             return redirect("orders:index")
 
-        return render(request = request,
-                          template_name = "orders/register.html",
-                          context={"form":form})
+        return render(request,
+                      template_name="orders/register.html",
+                      context={"form": form})
 
-    return render(request = request,
-                  template_name = "orders/register.html",
-                  context={"form":UserCreationForm})
+    return render(request,
+                  template_name="orders/register.html",
+                  context={"form": UserCreationForm()})
 
 def pizza(request):
     if request.user.is_authenticated:
@@ -132,10 +140,9 @@ def checkout(request):
         response_data = {}
         list_of_items = [item["item_description"] for item in cart]
 
-        order = UserOrder(username=username, order=list_of_items, price=float(price), delivered=False) #create the row entry
-        order.save() #save row entry in database
+        order = UserOrder(username=username, order=list_of_items, price=float(price), delivered=False) 
+        order.save() 
 
-        # Capture billing details from the form
         billing_details = {
             'name': request.POST.get('name', 'Not Provided'),
             'email': request.POST.get('email', 'Not Provided'),
@@ -161,10 +168,9 @@ def checkout(request):
 
 def view_orders(request):
     if request.user.is_superuser:
-        #make a request for all the orders in the database
+       
         rows = UserOrder.objects.all().order_by('-time_of_order')
-        #orders.append(row.order[1:-1].split(","))
-
+       
         return render(request, "orders/orders.html", context = {"rows":rows})
     else:
         rows = UserOrder.objects.all().filter(username = request.user.username).order_by('-time_of_order')
@@ -187,8 +193,8 @@ def mark_order_as_delivered(request):
 def save_cart(request):
     if request.method == 'POST':
         cart = request.POST.get('cart')
-        saved_cart = SavedCarts(username=request.user.username, cart=cart) #create the row entry
-        saved_cart.save() #save row entry in database
+        saved_cart = SavedCarts(username=request.user.username, cart=cart) 
+        saved_cart.save() 
         return HttpResponse(
             json.dumps({"good":"boy"}),
             content_type="application/json"
@@ -204,11 +210,11 @@ def save_cart(request):
 def retrieve_saved_cart(request):
     try:
         saved_cart = SavedCarts.objects.get(username=request.user.username)
-        # Ensure cart is not None and is valid JSON
-        cart_data = saved_cart.cart if saved_cart.cart else '[]' #default to an empty cart
-        return JsonResponse({'cart': cart_data}, safe=False) # Return as a JSON object
+       
+        cart_data = saved_cart.cart if saved_cart.cart else '[]' 
+        return JsonResponse({'cart': cart_data}, safe=False)
     except SavedCarts.DoesNotExist:
-        # No cart saved for this user, return an empty cart
+       
         return JsonResponse({'cart': '[]'}, safe=False)
 
 
@@ -251,7 +257,7 @@ from django.conf import settings
 from django.shortcuts import render, redirect
 
 paypalrestsdk.configure({
-    "mode": settings.PAYPAL_ENVIRONMENT,  # "sandbox" or "live"
+    "mode": settings.PAYPAL_ENVIRONMENT, 
     "client_id": settings.PAYPAL_CLIENT_ID,
     "client_secret": settings.PAYPAL_CLIENT_SECRET
 })
@@ -259,7 +265,7 @@ paypalrestsdk.configure({
 
 
 def payment_process(request):
-    amount = request.POST.get('amount', '0')  # Get the amount from the POST request
+    amount = request.POST.get('amount', '0')  
 
     payment = paypalrestsdk.Payment({
         "intent": "sale",
@@ -282,7 +288,7 @@ def payment_process(request):
     if payment.create():
         for link in payment.links:
             if link.rel == "approval_url":
-                return redirect(link.href)  # Redirect user to PayPal for approval
+                return redirect(link.href)  
     else:
         return render(request, "orders/payment_failed.html", {"error": payment.error})
 
@@ -303,7 +309,7 @@ def payment_cancel(request):
     return render(request, "orders/payment_cancel.html")
 
 def retrieve_saved_cart(request):
-    # Your logic to retrieve the saved cart
+    
     return JsonResponse({'status': 'success'})
 
 

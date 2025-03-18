@@ -3,7 +3,7 @@ import qrcode
 import os
 
 # Define the URL of your order page
-order_page_url = "http://127.0.0.1:8000/home"  # Replace with your actual URL
+order_page_url = "http://127.0.0.1:8000/"  # Replace with your actual URL
 
 # Generate the QR code
 qr = qrcode.QRCode(version=1, box_size=10, border=5)

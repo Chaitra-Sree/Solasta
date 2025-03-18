@@ -189,7 +189,7 @@ function clear_cart() {
     console.log("Sending logout request...");
 
     $.ajax({
-        url: "/save_cart",
+        url: "/save_cart",  // Ensure this endpoint is working
         type: "POST",
         data: { cart: current_cart, csrfmiddlewaretoken: csrftoken },
         success: function() {
@@ -197,13 +197,14 @@ function clear_cart() {
             localStorage.removeItem("cart");
             localStorage.setItem('cart_retrieved', false);
             console.log("Redirecting to logout...");
-            window.location.href = "/logout";
+            window.location.href = "/logout";  // Redirect to logout
         },
         error: function(xhr) {
             console.error("Logout failed:", xhr.responseText);
         }
     });
 }
+
 
   function getCookie(name) {
     var cookieValue = null;
