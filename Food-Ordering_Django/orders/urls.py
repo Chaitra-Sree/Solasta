@@ -13,6 +13,7 @@ urlpatterns = [
     path("login/", views.login_request, name="login"),
     path("register/", views.register, name="register"),
     path("logout/", views.logout_request, name="logout"),
+    
     path("pizza/", views.pizza, name="pizza"),
     path("pasta/", views.pasta, name="pasta"),
     path("salad/", views.salad, name="salad"),
@@ -34,7 +35,7 @@ urlpatterns = [
      path('payment_success/retrieve_saved_cart/', views.retrieve_saved_cart, name='retrieve_saved_cart'),
     path('payment_cancel/', views.payment_cancel, name='payment_cancel'),
     path("check_superuser/", views.check_superuser, name="check_superuser"),
-     
+    
     
     
     ]
