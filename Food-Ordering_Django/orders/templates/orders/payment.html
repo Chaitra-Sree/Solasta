@@ -10,7 +10,7 @@
         font-family: 'Work Sans', sans-serif;
         background-color: #f8f9fa;
         color: #573c2a;
-    }
+    };
 
     hr {
         color: #573c2a;
@@ -181,11 +181,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Function to setup PayPal payment
 function setupPayPal(subtotalINR) {
-    var conversionRate = 0.01111; // Example: Replace with real API for accuracy
-    var subtotalUSD = subtotalINR * conversionRate;
-
-    console.log("INR Total:", subtotalINR);
-    console.log("Converted USD Total:", subtotalUSD);
+    var conversionRate = 0.01119; // Example: 1RS - 0.01119 USD * 1640 
+    var subtotalUSD = subtotalINR * conversionRate 
+    console.log("INR Total:", subtotalINR); 
+    console.log("Converted USD Total:", subtotalUSD);  18.34
 
     paypal.Buttons({
         createOrder: function (data, actions) {
@@ -203,26 +202,15 @@ function setupPayPal(subtotalINR) {
                 alert('Transaction completed by ' + details.payer.name.given_name);
                 console.log(details);
 
-                // Show tick mark on success
-                var tickMark = document.createElement('div');
-                tickMark.innerHTML = '✓';
-                tickMark.style.fontSize = '50px';
-                tickMark.style.color = 'green';
-                document.getElementById("paypal-button-container").appendChild(tickMark);
-
-                // Generate unique invoice ID
-                var invoiceId = 'INV-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
-
-                // Save transaction details to localStorage
-                localStorage.setItem("transactionDetails", JSON.stringify(details));
-                localStorage.setItem("invoiceId", invoiceId);
+                
 
                 // Update order status in database
                 updateOrderStatus(details);
 
                 // Redirect to payment_success page
-                window.location.href = '/payment_success';
-            });
+                 window.location.href = '/payment_success';
+    });
+
         }
     }).render('#paypal-button-container');
 }

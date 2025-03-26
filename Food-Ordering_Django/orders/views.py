@@ -18,6 +18,10 @@ from django.shortcuts import render, redirect
 import logging
 from django.http import HttpResponse
 from django.shortcuts import redirect
+import paypalrestsdk
+from django.conf import settings
+
+
 
 
 def index(request):
@@ -246,16 +250,6 @@ def check_superuser(request):
     return HttpResponse(request.user.is_superuser)
 
 
-from django.shortcuts import render
-
-
-
-
-paypalrestsdk.configure({
-    "mode": "sandbox",  # "sandbox" or "live"
-    "client_id": "AW0vKEt-h7MrVgflNzqtWdDAsTV8etm7eu4wFsmJgVl_71SO2A6-uX_aDq8jjx66U1MnAcLwYFSPJYmb",
-    "client_secret": "EBZ3CrrlH0ebncizYblyqWEdNRsT_HkxFFy4NJzdC2p5FnrEQb0BvWfgw-qifZMxh2OShv8jqsm556G5",
-})
 
 
 
@@ -263,8 +257,12 @@ paypalrestsdk.configure({
 
 
 
-from django.shortcuts import render
-from django.http import HttpResponse
+
+
+
+
+
+
 
 def payment_page(request):
     amount = request.POST.get('amount', '0')  # Get the amount from the POST request
@@ -279,7 +277,7 @@ import paypalrestsdk
 from django.conf import settings
 from django.shortcuts import render, redirect
 
-paypalrestsdk.configure({
+paypalrestsdk.configure({                                  
     "mode": settings.PAYPAL_ENVIRONMENT, 
     "client_id": settings.PAYPAL_CLIENT_ID,
     "client_secret": settings.PAYPAL_CLIENT_SECRET
@@ -290,7 +288,7 @@ paypalrestsdk.configure({
 def payment_process(request):
     amount = request.POST.get('amount', '0')  
 
-    payment = paypalrestsdk.Payment({
+    payment = paypalrestsdk.Payment({   
         "intent": "sale",
         "payer": {
             "payment_method": "paypal"
@@ -308,7 +306,7 @@ def payment_process(request):
         }]
     })
 
-    if payment.create():
+    if payment.create(): 
         for link in payment.links:
             if link.rel == "approval_url":
                 return redirect(link.href)  
@@ -336,8 +334,7 @@ def retrieve_saved_cart(request):
     return JsonResponse({'status': 'success'})
 
 
-def qr_code_view(request):
-    return render(request, 'orders/qr_code.html') 
+
 
 
 
