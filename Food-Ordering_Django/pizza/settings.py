@@ -162,4 +162,6 @@ STATICFILES_DIRS = [
 PAYPAL_CLIENT_ID = "AfYaMGyH05MFfWDfTTL32MCoMgYXi5K0zqxxIBX07mB8q7XxwnK6A-hhN_HB6wZ2zIeK-r3AeDeiIfwJ"
 PAYPAL_CLIENT_SECRET = "EGYdaY4cLkrIMzYthqf2G6YVBLp1wxRcvKtw9cA83NfgIBoHor3aldODwdH9x2netp9s1Wo29Jz1E1z3"
 PAYPAL_ENVIRONMENT = "sandbox"  # Change to 'live' for production
-
+ 
+ 
+# store varables , specify enviroment ,security and code resuability 

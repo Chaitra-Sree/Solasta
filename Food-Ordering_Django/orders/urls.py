@@ -8,7 +8,7 @@ app_name = "orders"
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path('qr-code/', views.qr_code_view, name='qr_code'),
+    
 
     path("login/", views.login_request, name="login"),
     path("register/", views.register, name="register"),
