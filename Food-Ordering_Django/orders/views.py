@@ -30,10 +30,8 @@ def index(request):
         print("User is authenticated")
         return render(request, "orders/home.html", {"categories": Category.objects.all()})
     
-    # Allow guest access if 'qr_access' parameter is provided in the URL
-    elif request.GET.get('qr_access') == '1':
-        print("QR access granted")
-        return render(request, "orders/home.html", {"categories": Category.objects.all()})
+    
+    
     
     # For all other cases, redirect to login
     else:
@@ -88,8 +86,8 @@ def register(request):
                   context={"form": UserCreationForm()})
 
 def pizza(request):
-    print("qr_access in session:", request.session.get('qr_access'))
-    if request.user.is_authenticated or request.session.get('qr_access') == '1':
+    
+    if request.user.is_authenticated :
         return render(request, "orders/pizza.html", context={
             "regular_pizza": RegularPizza.objects.all(),
             "sicillian_pizza": SicilianPizza.objects.all(),
@@ -102,7 +100,7 @@ def pizza(request):
 
 
 def pasta(request):
-    if request.user.is_authenticated or request.session.get('qr_access') == '1':
+    if request.user.is_authenticated :
         return render(request, "orders/pasta.html", context={"dishes": Pasta.objects.all()})
     else:
         return redirect("orders:login")
@@ -110,7 +108,7 @@ def pasta(request):
 
 
 def salad(request):
-    if request.user.is_authenticated or request.session.get('qr_access') == '1':
+    if request.user.is_authenticated :
         return render(request, "orders/salad.html", context={"dishes": Salad.objects.all()})
     else:
         return redirect("orders:login")
@@ -118,14 +116,14 @@ def salad(request):
 
 
 def tacos(request):
-    if request.user.is_authenticated or request.session.get('qr_access') == '1':
+    if request.user.is_authenticated :
         return render(request, "orders/tacos.html", context = {"dishes":Sub.objects.all})
     else:
         return redirect("orders:login")
 
 
 def platters(request):
-    if request.user.is_authenticated or request.session.get('qr_access') == '1':
+    if request.user.is_authenticated :
         # Use parentheses to call the method and get the query results
         dishes = DinnerPlatters.objects.all()
         print(dishes)  # Add a debug print statement to check the data
@@ -136,25 +134,25 @@ def platters(request):
 
 # Static Pages
 def directions(request):
-    if request.user.is_authenticated or request.session.get('qr_access') == '1':
+    if request.user.is_authenticated :
         return render(request, "orders/directions.html")
     else:
         return redirect("orders:login")
 
 def aboutus(request):
-    if request.user.is_authenticated or request.session.get('qr_access') == '1':
+    if request.user.is_authenticated :
         return render(request, "orders/aboutus.html")
     else:
         return redirect("orders:login")
 
 def contact(request):
-    if request.user.is_authenticated or request.session.get('qr_access') == '1':
+    if request.user.is_authenticated :
         return render(request, "orders/contact.html")
     else:
         return redirect("orders:login")
 
 def cart(request):
-    if request.user.is_authenticated or request.session.get('qr_access') == '1':
+    if request.user.is_authenticated :
         return render(request, "orders/cart.html")
     else:
         return redirect("orders:login")
